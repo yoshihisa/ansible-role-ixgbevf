@@ -14,8 +14,8 @@ In this example we configutation AWS EC2 and version 4.5.3.
 ```
 
 You put archive file in `files`.The archive file name should be `ixgbevf-4.5.3.tar.gz`.   
-You can find from [SourceForge](https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/).
-If can not find in `files`, download from SourceForge at runtime. 
+You can find from [SourceForge](https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/).  
+If can not find in `files`, download from SourceForge at runtime.  
 This sha1 hash is used to validate the downloaded archive file.  
 you configure value from upstream or compute.
 
