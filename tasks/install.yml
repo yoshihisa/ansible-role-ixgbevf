@@ -1,0 +1,56 @@
+---
+- name: check_kernel_version
+  shell: uname -r
+  register: kernel_version
+  changed_when: no
+
+- name: install_epel-release
+  yum:
+    name: epel-release
+    state: present
+  become: yes
+  
+- name: install_dependancies
+  yum:
+    name: {{ item }}
+    state: latest
+  with_items:
+    - tar
+    - dkms
+    - kernel-headers-{{ kernel_version.stdout  }}
+    - kernel-devel-{{ kernel_version.stdout  }}
+    - perl
+
+- name: download_driver_archive
+  get_url:
+    url: "https://downloads.sourceforge.net/project/e1000/ixgbevf%20stable/{{ ixgbevf_version }}/ixgbevf-{{ ixgbevf_version }}.tar.gz"
+    dest: /tmp/ixgbevf-{{ ixgbevf_version }}.tar.gz
+    checksum: sha1:{{ ixgbevf_tar_sha256_hash }}
+
+- name: unpack_driver_source
+  unarchive:
+    src: "/tmp/ixgbevf-{{ ixgbevf_version }}.tar.gz"
+    dest: /usr/src/
+    copy: no
+
+- name: set_dkms_config
+  template:
+    src: dkms.conf.j2
+    dest: "/usr/src/ixgbevf-{{ ixgbevf_version }}/dkms.conf"
+
+- name: add_module_to_dkms
+  command: dkms add -m ixgbevf -v "{{ ixgbevf_version }}"
+  ignore_errors: yes
+
+- name: build_module_via_dkms
+  command: dkms build -m ixgbevf -v "{{ ixgbevf_version }}"
+
+- name: install_module_via_dkms
+  command: dkms install -m ixgbevf -v "{{ ixgbevf_version }}"
+
+- name: update_kernel_module_list
+  command: depmod
+
+- name: rebuild_initrmfs
+  command: dracut -f
+

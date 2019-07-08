@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Yoshihisa
+  description: Installs the Intel ixgbevf driver required for AWS Enhanced Networking (SR-IOV)
+  license: ASL 2.0
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+  categories:
+    - cloud:ec2
+    - networking
+    - system
+
+dependencies: []
