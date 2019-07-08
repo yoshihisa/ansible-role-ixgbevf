@@ -9,23 +9,29 @@
     name: epel-release
     state: present
   become: yes
-  
+
 - name: install_dependancies
   yum:
-    name: {{ item }}
+    name:
+      - tar
+      - dkms
+      - kernel-headers-{{ kernel_version.stdout  }}
+      - kernel-devel-{{ kernel_version.stdout  }}
+      - perl
     state: latest
-  with_items:
-    - tar
-    - dkms
-    - kernel-headers-{{ kernel_version.stdout  }}
-    - kernel-devel-{{ kernel_version.stdout  }}
-    - perl
+
+- name: copy_local_tarball
+  copy:
+    src: files/ixgbevf-{{ ixgbevf_version }}.tar.gz
+    dest: /tmp/ixgbevf-{{ ixgbevf_version }}.tar.gz
+  ignore_errors: yes
 
 - name: download_driver_archive
   get_url:
     url: "https://downloads.sourceforge.net/project/e1000/ixgbevf%20stable/{{ ixgbevf_version }}/ixgbevf-{{ ixgbevf_version }}.tar.gz"
     dest: /tmp/ixgbevf-{{ ixgbevf_version }}.tar.gz
-    checksum: sha1:{{ ixgbevf_tar_sha256_hash }}
+    checksum: sha1:{{ ixgbevf_tar_sha1_hash }}
+   when:
 
 - name: unpack_driver_source
   unarchive:
@@ -53,4 +59,3 @@
 
 - name: rebuild_initrmfs
   command: dracut -f
-

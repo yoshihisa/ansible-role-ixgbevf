@@ -5,4 +5,12 @@
   ignore_errors: yes
 
 - include: install.yml
-  when: check_result_driver_version.stdout != "{{ ixgbevf_version }}"
+  when: check_result_driver_version.stdout != ixgbevf_version
+
+- name: check_pre_install_driver_version
+  shell: modinfo ixgbevf|grep -i "^version:" | grep -Po "(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$"
+  register: check_result_post_install_driver_version
+  ignore_errors: yes
+
+- name: assert_driver_version
+  assert: { that: "check_result_post_install_driver_version.stdout ==  '{{ ixgbevf_version }}'"  }
