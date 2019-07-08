@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: ixgbevf
   author: Yoshihisa
   description: Installs the Intel ixgbevf driver required for AWS Enhanced Networking (SR-IOV)
   license: MIT
