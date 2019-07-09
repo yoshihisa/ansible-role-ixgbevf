@@ -1,6 +1,6 @@
 ---
 - name: check_kernel_version
-  shell: uname -r
+   command: uname -r
   register: kernel_version
   changed_when: no
 
@@ -18,7 +18,7 @@
       - kernel-headers-{{ kernel_version.stdout  }}
       - kernel-devel-{{ kernel_version.stdout  }}
       - perl
-    state: latest
+    state: present
 
 - name: copy_local_tarball
   copy:
