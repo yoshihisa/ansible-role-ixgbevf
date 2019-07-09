@@ -31,7 +31,6 @@
     url: "https://downloads.sourceforge.net/project/e1000/ixgbevf%20stable/{{ ixgbevf_version }}/ixgbevf-{{ ixgbevf_version }}.tar.gz"
     dest: /tmp/ixgbevf-{{ ixgbevf_version }}.tar.gz
     checksum: sha1:{{ ixgbevf_tar_sha1_hash }}
-   when:
 
 - name: unpack_driver_source
   unarchive:
