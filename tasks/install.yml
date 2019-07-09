@@ -1,6 +1,6 @@
 ---
 - name: check_kernel_version
-   command: uname -r
+  command: uname -r
   register: kernel_version
   changed_when: no
 
